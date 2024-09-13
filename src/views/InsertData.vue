@@ -97,16 +97,14 @@
                 ></v-text-field>
               </div>
             </v-form>
-            <v-btn @click="submitToGoogleSheets" class="w-full">Submit</v-btn>
           </v-card-text>
-
-        </v-card>
-
-        <v-card height="640">
-          <v-card-title>
+          <v-card-text>
+            <v-divider class="border-opacity-75"
+              ><v-btn @click="showReadme = !showReadme" density="compact" :prepend-icon="showReadme ? 'remove' : 'add'">{{ showReadme ? 'remove' : 'add' }} readme</v-btn
+            ></v-divider>
+          </v-card-text>
+          <v-card-text class="h-[600px]" v-if="showReadme">
             <h3>Readme.md</h3>
-          </v-card-title>
-          <v-card-text class="h-[600px]">
             <v-row class="h-full">
               <v-col cols="6">
                 <h3 class="font-bold">Writing:</h3>
@@ -124,6 +122,10 @@
                 </div>
               </v-col>
             </v-row>
+          </v-card-text>
+
+          <v-card-text>
+            <v-btn @click="submitToGoogleSheets" class="w-full">Submit</v-btn>
           </v-card-text>
         </v-card>
       </v-col>
@@ -148,6 +150,7 @@ const language = ref('')
 const deploy = ref('')
 const readme = ref('')
 const valid = ref(true)
+const showReadme = ref(false)
 
 const renderedMarkdown = computed(() => marked(readme.value))
 
