@@ -182,7 +182,18 @@ const submitToGoogleSheets = async () => {
     }).then((res) => {
       if (res.ok) {
         alert('Data saved successfully')
-        window.location.reload()
+        name.value = ''
+        detail.value = ''
+        ip.value = ''
+        directory.value = ''
+        url.value = ''
+        log.value = ''
+        document.value = ''
+        etc.value = ''
+        type.value = ''
+        language.value = ''
+        deploy.value = ''
+        readme.value = ''
       } else {
         throw new Error('Error occurred while saving data to Google Sheets')
       }
