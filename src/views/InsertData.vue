@@ -15,6 +15,7 @@
                   :items="['Web App', 'API', 'Crontab', 'Script']"
                   variant="outlined"
                   density="compact"
+                  required
                 ></v-select>
                 <v-select
                   v-model="language"
@@ -31,6 +32,7 @@
                   ]"
                   variant="outlined"
                   density="compact"
+                  required
                 ></v-select>
               </div>
               <v-text-field
@@ -94,9 +96,10 @@
                   required
                 ></v-text-field>
               </div>
-              <v-btn @click="submitToGoogleSheets">Submit</v-btn>
             </v-form>
+            <v-btn @click="submitToGoogleSheets" class="w-full">Submit</v-btn>
           </v-card-text>
+
         </v-card>
 
         <v-card height="640">
@@ -129,8 +132,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
-
 import { ref, computed } from 'vue'
 import { marked } from 'marked'
 
@@ -166,17 +167,24 @@ const submitToGoogleSheets = async () => {
   }
 
   try {
-    const response = await axios({
-      method: 'post',
-      url: 'https://script.google.com/macros/s/AKfycbxiAmZFkSgI3zbhawls0QfQmZSJS4qL1bnjD2bc5noOi2hA-pIUF5EMccuUnZ5AE6XY9w/exec',
-      data: formData,
-      
+    const URL =
+      'https://script.google.com/macros/s/AKfycbxJzfTPzvdy-7eJcWbcO4W82TjyGiltR6dsecyOwcCDHsAa_7jiZYJWi-mWGYHIbMIgaQ/exec'
+    const response = await fetch(URL, {
+      redirect: 'follow',
+      method: 'POST',
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      }
+    }).then((res) => {
+      if (res.ok) {
+        alert('Data saved successfully')
+        window.location.reload()
+      } else {
+        throw new Error('Error occurred while saving data to Google Sheets')
+      }
     })
-    if (response.data.status === 'success') {
-      alert('Data has been saved to Google Sheets successfully!')
-    } else {
-      alert('Failed to save data to Google Sheets')
-    }
+    console.log('response:', response)
   } catch (error) {
     console.error('Error saving data to Google Sheets:', error)
     alert('Error occurred while saving data to Google Sheets')
