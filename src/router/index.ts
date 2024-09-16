@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/api/:id/:title',
     name: 'api',
-    component: () => import('../views/AboutView.vue'),
+    component: () => import('../views/ProjectDetail.vue'),
     meta: {
       requiresAuth: true
     }

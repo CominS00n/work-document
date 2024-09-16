@@ -14,13 +14,6 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    open: true,
-    proxy: {
-      '/api': {
-        target: 'https://script.google.com/macros/s/AKfycbz4HK3_39VD6BW2A7Mk9K2od9nfjhIGznKTAY8UI81MeyUz28qSyEFqZz2vlS3txpSoMg/exec',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
+    open: true
   }
 })

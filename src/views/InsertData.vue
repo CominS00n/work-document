@@ -10,7 +10,7 @@
             <v-form ref="form" v-model="valid" lazy-validation>
               <div class="flex gap-x-2">
                 <v-select
-                  v-model="type"
+                  v-model="formData.type"
                   label="Select Type"
                   :items="['Web App', 'API', 'Crontab', 'Script']"
                   variant="outlined"
@@ -18,7 +18,7 @@
                   required
                 ></v-select>
                 <v-select
-                  v-model="language"
+                  v-model="formData.language"
                   label="Select Language/Framework"
                   :items="[
                     'Python',
@@ -36,21 +36,21 @@
                 ></v-select>
               </div>
               <v-text-field
-                v-model="name"
+                v-model="formData.name"
                 label="Name"
                 density="compact"
                 variant="underlined"
                 required
               ></v-text-field>
               <v-textarea
-                v-model="detail"
+                v-model="formData.detail"
                 label="Detail"
                 density="compact"
                 variant="underlined"
                 required
               ></v-textarea>
               <v-select
-                v-model="deploy"
+                v-model="formData.status"
                 label="Deploy Status"
                 :items="['In process', 'Testbed', 'Production']"
                 variant="outlined"
@@ -58,25 +58,25 @@
               ></v-select>
               <div class="flex gap-x-2">
                 <v-text-field
-                  v-model="ip"
+                  v-model="formData.ip"
                   label="IP Address"
                   variant="underlined"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="directory"
+                  v-model="formData.directory"
                   label="Directory"
                   variant="underlined"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="url"
+                  v-model="formData.url"
                   label="URL"
                   variant="underlined"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="log"
+                  v-model="formData.log"
                   label="Log Directory"
                   variant="underlined"
                   required
@@ -84,13 +84,13 @@
               </div>
               <div class="flex gap-x-2">
                 <v-text-field
-                  v-model="document"
+                  v-model="formData.document"
                   label="Document"
                   variant="underlined"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="etc"
+                  v-model="formData.etc"
                   label="etc."
                   variant="underlined"
                   required
@@ -100,8 +100,13 @@
           </v-card-text>
           <v-card-text>
             <v-divider class="border-opacity-75"
-              ><v-btn @click="showReadme = !showReadme" density="compact" :prepend-icon="showReadme ? 'remove' : 'add'">{{ showReadme ? 'remove' : 'add' }} readme</v-btn
-            ></v-divider>
+              ><v-btn
+                @click="showReadme = !showReadme"
+                density="compact"
+                :prepend-icon="showReadme ? 'remove' : 'add'"
+                >{{ showReadme ? 'remove' : 'add' }} readme</v-btn
+              ></v-divider
+            >
           </v-card-text>
           <v-card-text class="h-[600px]" v-if="showReadme">
             <h3>Readme.md</h3>
@@ -134,45 +139,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 import { marked } from 'marked'
+import { ref, computed, reactive } from 'vue'
+import { useToast } from 'vue-toastification'
+import { addProject } from '@/firebase/firebase'
+import type { ProjectData } from '@/interface/interface'
 
-const name = ref('')
-const detail = ref('')
-const ip = ref('')
-const directory = ref('')
-const url = ref('')
-const log = ref('')
-const document = ref('')
-const etc = ref('')
-const type = ref('')
-const language = ref('')
-const deploy = ref('')
 const readme = ref('')
 const valid = ref(true)
 const showReadme = ref(false)
+const toast = useToast()
 
 const renderedMarkdown = computed(() => marked(readme.value))
+const formData = reactive<ProjectData>({
+  type: '',
+  name: '',
+  language: '',
+  detail: '',
+  status: '',
+  ip: '',
+  directory: '',
+  url: '',
+  log: '',
+  document: '',
+  etc: ''
+})
 
 const submitToGoogleSheets = async () => {
-  const formData = {
-    type: type.value,
-    name: name.value,
-    language: language.value,
-    detail: detail.value,
-    status: deploy.value,
-    ip: ip.value,
-    directory: directory.value,
-    url: url.value,
-    log: log.value,
-    document: document.value,
-    etc: etc.value
-  }
-
   try {
     const URL =
       'https://script.google.com/macros/s/AKfycbxJzfTPzvdy-7eJcWbcO4W82TjyGiltR6dsecyOwcCDHsAa_7jiZYJWi-mWGYHIbMIgaQ/exec'
-    const response = await fetch(URL, {
+    await fetch(URL, {
       redirect: 'follow',
       method: 'POST',
       body: JSON.stringify(formData),
@@ -181,27 +178,34 @@ const submitToGoogleSheets = async () => {
       }
     }).then((res) => {
       if (res.ok) {
-        alert('Data saved successfully')
-        name.value = ''
-        detail.value = ''
-        ip.value = ''
-        directory.value = ''
-        url.value = ''
-        log.value = ''
-        document.value = ''
-        etc.value = ''
-        type.value = ''
-        language.value = ''
-        deploy.value = ''
-        readme.value = ''
+        console.log('Data saved successfully')
       } else {
-        throw new Error('Error occurred while saving data to Google Sheets')
+        console.error('Error occurred while saving data to Google Sheets')
+        toast.error('Error occurred while saving data to Google Sheets')
       }
     })
-    console.log('response:', response)
   } catch (error) {
     console.error('Error saving data to Google Sheets:', error)
-    alert('Error occurred while saving data to Google Sheets')
+  }
+
+  try {
+    await addProject(formData, readme.value)
+    console.log('Data saved successfully')
+    formData.type = ''
+    formData.name = ''
+    formData.language = ''
+    formData.detail = ''
+    formData.status = ''
+    formData.ip = ''
+    formData.directory = ''
+    formData.url = ''
+    formData.log = ''
+    formData.document = ''
+    formData.etc = ''
+    toast.success('Data saved successfully')
+  } catch (error) {
+    console.error('Error saving data to Firestore:', error)
+    toast.error('Error occurred while saving data to Firestore')
   }
 }
 </script>

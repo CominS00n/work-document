@@ -44,10 +44,10 @@
               </template>
               <v-list-item
                 v-for="submenu in item.submenus"
-                :key="submenu.title"
-                :title="submenu.title"
-                :value="submenu.title"
-                :to="`${item.link}/${submenu.id}/${submenu.title}`"
+                :key="submenu.name"
+                :title="submenu.name"
+                :value="submenu.name"
+                :to="`${item.link}/${submenu.id}/${submenu.name}`"
               ></v-list-item>
             </v-list-group>
           </v-list-item>
@@ -59,8 +59,8 @@
         </template>
       </v-navigation-drawer>
 
-      <v-main style="height: 100vh; overflow-y: auto;">
-        <v-container >
+      <v-main style="height: 100vh; overflow-y: auto">
+        <v-container>
           <router-view />
         </v-container>
       </v-main>
@@ -69,10 +69,11 @@
 </template>
 
 <script setup lang="ts">
-import { RouterView} from 'vue-router'
+import { RouterView } from 'vue-router'
 import { useChangeThemeStore } from '@/stores/theme'
-import { menuItems } from '@/data/menu'
 import { useLoginStore } from '@/stores/login'
+import { useNavStore } from './stores/navStores'
+import { onMounted, ref } from 'vue'
 
 const changTheme = useChangeThemeStore()
 const toggleTheme = () => {
@@ -81,6 +82,21 @@ const toggleTheme = () => {
 
 const { logout } = useLoginStore()
 
+const { getNavList } = useNavStore()
+const menuItems = ref<
+  Array<{
+    title: string
+    icon: string
+    link: string
+    submenus: Array<{ id: string; type: string; name: string }>
+  }>
+>([])
+
+onMounted(async () => {
+  await getNavList().then((res) => {
+    menuItems.value = res
+  })
+})
 </script>
 
 <style lang="css">
