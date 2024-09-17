@@ -15,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
-
 const addProject = async (data: ProjectData, readme: string) => {
   try {
     const docRef = await addDoc(collection(db, 'working'), {

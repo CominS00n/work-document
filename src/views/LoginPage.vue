@@ -1,42 +1,41 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-card max-width="540">
-          <v-card-text>
-            <h1>Login</h1>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field
-                v-model="username"
-                label="Username"
-                variant="underlined"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model="password"
-                :rules="passwordRules"
-                label="Password"
-                variant="underlined"
-                type="password"
-                required
-              ></v-text-field>
-              <v-btn @click="submit">Submit</v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="h-svh w-svw flex justify-center items-center">
+    <v-card width="540">
+      <v-card-title>
+        <h2 class="text-center">Login</h2>
+      </v-card-title>
+      <v-card-text>
+        <v-text-field
+          v-model="username"
+          label="Username"
+          variant="underlined"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="password"
+          :rules="passwordRules"
+          label="Password"
+          variant="underlined"
+          type="password"
+          required
+        ></v-text-field>
+      </v-card-text>
+      <template v-slot:actions>
+        <v-btn @click="submit" variant="outlined" class="flex-grow-1">Submit</v-btn>
+        <v-btn @click="cancel">Cancel</v-btn>
+      </template>
+    </v-card>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useLoginStore } from '@/stores/login'
+import { useRouter } from 'vue-router'
 
 const { login } = useLoginStore()
 const username = ref('')
 const password = ref('')
-const valid = ref(true)
 
 const passwordRules = [
   (v: string) => !!v || 'Password is required',
@@ -45,5 +44,14 @@ const passwordRules = [
 
 const submit = () => {
   login(username.value, password.value)
+}
+
+const router = useRouter()
+const cancel = () => {
+  username.value = ''
+  password.value = ''
+  router.push('/').then(() => {
+    window.location.reload()
+  })
 }
 </script>

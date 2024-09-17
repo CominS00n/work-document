@@ -26,82 +26,59 @@ export const useNavStore = defineStore('nav', () => {
         title: 'Home',
         link: '/home',
         icon: 'home',
-        submenus: []
+        submenus: [],
+        role: 'user'
       },
       {
         title: 'Web App',
         icon: 'web',
-        link: '/web-app',
-        submenus: navList.value.filter((item) => item.type === 'Web App')
+        link: '/webapp',
+        submenus: navList.value.filter((item) => item.type === 'Web App'),
+        role: 'user'
       },
       {
         title: 'API',
         link: '/api',
         icon: 'http',
-        submenus: navList.value.filter((item) => item.type === 'API')
+        submenus: navList.value.filter((item) => item.type === 'API'),
+        role: 'user'
       },
       {
         title: 'Scripts',
-        link: '/scripts',
+        link: '/script',
         icon: 'code',
-        submenus: navList.value.filter((item) => item.type === 'Scripts')
+        submenus: navList.value.filter((item) => item.type === 'Script'),
+        role: 'user'
       },
       {
         title: 'Crontab',
         link: '/crontab',
         icon: 'manage_history',
-        submenus: navList.value.filter((item) => item.type === 'Crontab')
+        submenus: navList.value.filter((item) => item.type === 'Crontab'),
+        role: 'user'
       },
       {
         title: 'Manage',
         link: '/manage',
         icon: 'edit_note',
-        submenus: []
+        submenus: [],
+        role: 'admin'
+      },
+      {
+        title: 'Super Admin',
+        link: '/super-admin',
+        icon: 'admin_panel_settings',
+        submenus: [
+          {
+            id: 'register',
+            type: 'setting',
+            name: 'register'
+          }
+        ],
+        role: 'super-admin'
       }
     ]
     return menuItems
   }
   return { navList, getNavList }
 })
-
-// {
-//     title: 'Home',
-//     link: '/home',
-//     icon: 'home',
-//     submenus: []
-//   },
-//   {
-//     title: 'Web App',
-//     icon: 'web',
-//     link: '/web-app',
-//     submenus: navList.value.filter((item) => item.type === 'Web App')
-//   },
-//   {
-//     title: 'API',
-//     link: '/api',
-//     icon: 'http',
-//     submenus: [
-//       {
-//         id: 1,
-//         title: 'Django'
-//       }
-//     ]
-//   },
-//   {
-//     title: 'Scripts',
-//     link: '/scripts',
-//     icon: 'code',
-//     submenus: []
-//   },
-//   {
-//     title: 'Crontab',
-//     link: '/crontab',
-//     icon: 'manage_history',
-//     submenus: []
-//   },
-//   {
-//     title: 'Manage',
-//     link: '/manage',
-//     icon: 'edit_note',
-//     submenus: []
-//   }

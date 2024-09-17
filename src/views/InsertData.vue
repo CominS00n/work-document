@@ -206,6 +206,8 @@ const submitToGoogleSheets = async () => {
   } catch (error) {
     console.error('Error saving data to Firestore:', error)
     toast.error('Error occurred while saving data to Firestore')
+  } finally {
+    location.reload()
   }
 }
 </script>

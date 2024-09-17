@@ -1,10 +1,61 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="space-y-2">
+      <v-col cols="12" class="space-y-5">
         <h1 class="font-bold text-lg">Documentation All Project</h1>
-        <div class="flex justify-between">
-          <v-card min-width="540">
+        <v-card>
+          <v-card-text>
+            <v-card-title>All Project</v-card-title>
+            <div class="inline-flex flex-wrap gap-5">
+              <v-card v-for="item in data" v-bind:key="item.id" max-width="360">
+                <v-card-title>{{ item.name }}</v-card-title>
+                <v-card-subtitle class="space-x-2">
+                  <v-chip
+                    size="x-small"
+                    :color="item.status === 'Production' ? 'success' : ''"
+                    variant="outlined"
+                    >{{ item.status }}</v-chip
+                  >
+                  <v-chip size="x-small" color="secondary">{{ item.type }}</v-chip>
+                  <v-chip size="x-small" color="secondary">{{ item.language }}</v-chip>
+                </v-card-subtitle>
+                <v-card-text>
+                  <p>{{ item.detail }}</p>
+                  <div class="mt-4">
+                    <router-link
+                      :to="`/${item.type === 'Web App' ? 'webapp' : item.type}/${item.id}/${item.name}`"
+                      ><v-btn
+                        variant="outlined"
+                        size="small"
+                        rounded="xl"
+                        append-icon="arrow_forward"
+                        class="text-none"
+                        >More</v-btn
+                      ></router-link
+                    >
+                  </div>
+                </v-card-text>
+              </v-card>
+            </div>
+          </v-card-text>
+        </v-card>
+        <v-card>
+          <v-card-title
+            ><h2 class="flex items-center">
+              GitHub<box-icon type="logo" name="github" class="fill-gray-500"></box-icon></h2
+          ></v-card-title>
+          <v-card-text>
+            <a
+              href="https://github.com/develop-billone"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline"
+              >GitHub</a
+            >
+          </v-card-text>
+        </v-card>
+        <div class="gap-x-10 grid md:flex">
+          <v-card class="w-full">
             <v-card-title>
               <h2 class="flex items-center">
                 Python<box-icon type="logo" name="python" class="fill-blue-500"></box-icon>
@@ -32,7 +83,7 @@
               <v-code>pip install -r requirements.txt</v-code>
             </v-card-text>
           </v-card>
-          <v-card min-width="540">
+          <v-card class="w-full">
             <v-card-title>
               <h2 class="flex items-center">
                 Vue<box-icon type="logo" name="vuejs" class="fill-green-500"></box-icon>
@@ -61,22 +112,43 @@
             </v-card-text>
           </v-card>
         </div>
-        <v-card>
-          <v-card-title
-            ><h2 class="flex items-center">
-              GitHub<box-icon type="logo" name="github" class="fill-gray-500"></box-icon></h2
-          ></v-card-title>
-          <v-card-text>
-            <a
-              href="https://github.com/develop-billone"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="underline"
-              >GitHub</a
-            >
-          </v-card-text>
-        </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
+
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { db } from '@/firebase/firebase'
+import { collection, getDocs } from 'firebase/firestore'
+import { RouterLink } from 'vue-router'
+
+interface ProjectData {
+  id: string
+  type: string
+  name: string
+  language: string
+  detail: string
+  status: string
+}
+
+const data = ref<ProjectData[]>([])
+const getDocsData = async () => {
+  const querySnapshot = await getDocs(collection(db, 'working'))
+  querySnapshot.forEach((doc) => {
+    const docData = {
+      id: doc.id,
+      type: doc.data().type,
+      name: doc.data().name,
+      language: doc.data().language,
+      detail: doc.data().detail,
+      status: doc.data().status
+    }
+    data.value.push(docData)
+  })
+}
+
+onMounted(async () => {
+  await getDocsData()
+})
+</script>
