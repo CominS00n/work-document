@@ -6,7 +6,7 @@
         <v-card>
           <v-card-text>
             <v-card-title>All Project</v-card-title>
-            <div class="inline-flex flex-wrap justify-evenly gap-5">
+            <div class="inline-flex flex-wrap justify-between gap-5">
               <v-card v-for="item in data" :key="item.id" max-width="360">
                 <v-card-title>{{ item.name }}</v-card-title>
                 <v-card-subtitle class="space-x-2">
