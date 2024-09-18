@@ -9,11 +9,13 @@
               v-model="data.username"
               label="Username"
               variant="underlined"
+              density="compact"
               required
             ></v-text-field>
             <v-text-field
               v-model="password"
               label="Password"
+              density="compact"
               variant="underlined"
               type="password"
               :rules="passRule"
@@ -22,6 +24,7 @@
             <v-text-field
               v-model="confirmPass"
               label="Confirm Password"
+              density="compact"
               variant="underlined"
               type="password"
               required
@@ -30,6 +33,7 @@
               v-model="data.role"
               label="Select"
               variant="underlined"
+              density="compact"
               :items="roleItems"
             ></v-select>
             <v-btn @click="submit">Submit</v-btn>

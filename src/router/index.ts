@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { components } from 'vuetify/dist/vuetify-labs.js'
 
 const routes = [
   {
@@ -72,6 +73,11 @@ const routes = [
             name: 'register',
             component: () => import('../views/RegisterPage.vue')
           },
+          {
+            path: ':id/usermanage',
+            name: 'usermanage',
+            component: () => import('../views/UserMange.vue')
+          }
         ],
         beforeEnter: (to: any, from: any) => {
           if (localStorage.getItem('role') !== 'super-admin') {

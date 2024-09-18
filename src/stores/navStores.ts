@@ -73,6 +73,11 @@ export const useNavStore = defineStore('nav', () => {
             id: 'register',
             type: 'setting',
             name: 'register'
+          },
+          {
+            id: 'usermanage',
+            type: 'setting',
+            name: 'usermanage'
           }
         ],
         role: 'super-admin'

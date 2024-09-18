@@ -19,13 +19,11 @@ interface RegisterData {
   role: string
 }
 
-interface PermissionData {
+interface UserData {
+  id: string
+  username: string
+  password: string
   role: string
-  view: boolean
-  insert: boolean
-  update: boolean
-  delete: boolean
-  super: boolean
 }
 
-export type { ProjectData, RegisterData, PermissionData }
+export type { ProjectData, RegisterData, UserData }
