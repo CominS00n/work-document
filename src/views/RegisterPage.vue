@@ -78,11 +78,8 @@ const submit = () => {
         password.value = ''
         confirmPass.value = ''
       })
-      toast.success('Success')
     } catch (error) {
       toast.error('Error')
-    } finally {
-      location.reload()
     }
   }
 }

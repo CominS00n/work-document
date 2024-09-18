@@ -1,4 +1,5 @@
 interface ProjectData {
+  id: string
   type: string
   name: string
   language: string

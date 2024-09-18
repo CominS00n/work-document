@@ -71,29 +71,25 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { db } from '@/firebase/firebase'
-import { getDocs, collection } from 'firebase/firestore'
+import { useProjectDataStore } from '@/stores/getProjectData'
 import type { ProjectData } from '@/interface/interface'
 
+const { getProjectData } = useProjectDataStore()
+
 const route = useRoute()
-
 const projectData = ref<ProjectData>()
-const getProjects = async () => {
-  const querySnapshot = await getDocs(collection(db, 'working'))
-  querySnapshot.forEach((doc) => {
-    if (doc.id === route.params.id) {
-      projectData.value = doc.data() as ProjectData
-    }
-  })
-}
 
-onMounted(() => {
-  getProjects()
+onMounted(async () => {
+  await getProjectData(route.params.id.toString()).then((data) => {
+    projectData.value = data
+  })
 })
 
-watch(route, () => {
-  getProjects()
+watch(route, async () => {
+  await getProjectData(route.params.id.toString()).then((data) => {
+    projectData.value = data
+  })
 })
 </script>

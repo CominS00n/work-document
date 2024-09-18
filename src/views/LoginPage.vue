@@ -43,15 +43,13 @@ const passwordRules = [
 ]
 
 const submit = () => {
-  login(username.value, password.value)
+  login(username.value.trim(), password.value)
 }
 
 const router = useRouter()
 const cancel = () => {
   username.value = ''
   password.value = ''
-  router.push('/').then(() => {
-    window.location.reload()
-  })
+  router.push('/')
 }
 </script>

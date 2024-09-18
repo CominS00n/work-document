@@ -72,11 +72,6 @@ const routes = [
             name: 'register',
             component: () => import('../views/RegisterPage.vue')
           },
-          {
-            path: ':id/permission',
-            name: 'permission',
-            component: () => import('../views/PermissionPage.vue')
-          }
         ],
         beforeEnter: (to: any, from: any) => {
           if (localStorage.getItem('role') !== 'super-admin') {
@@ -99,6 +94,7 @@ const routes = [
     component: () => import('../views/PageNotFound.vue')
   }
 ]
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes

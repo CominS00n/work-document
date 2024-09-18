@@ -152,6 +152,7 @@ const toast = useToast()
 
 const renderedMarkdown = computed(() => marked(readme.value))
 const formData = reactive<ProjectData>({
+  id: '',
   type: '',
   name: '',
   language: '',
@@ -206,8 +207,6 @@ const submitToGoogleSheets = async () => {
   } catch (error) {
     console.error('Error saving data to Firestore:', error)
     toast.error('Error occurred while saving data to Firestore')
-  } finally {
-    location.reload()
   }
 }
 </script>

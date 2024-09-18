@@ -10,8 +10,8 @@ interface NavData {
 }
 
 export const useNavStore = defineStore('nav', () => {
-  const navList = ref<NavData[]>([])
   const getNavList = async () => {
+    const navList = ref<NavData[]>([])
     const querySnapshot = await getDocs(collection(db, 'working'))
     querySnapshot.forEach((doc) => {
       const navItem = {
@@ -80,5 +80,5 @@ export const useNavStore = defineStore('nav', () => {
     ]
     return menuItems
   }
-  return { navList, getNavList }
+  return { getNavList }
 })

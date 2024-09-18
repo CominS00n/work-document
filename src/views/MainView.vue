@@ -55,9 +55,12 @@
             </v-list-group>
           </v-list-item>
         </v-list>
-        <template v-slot:append v-if="isButton">
-          <div class="pa-2">
+        <template v-slot:append>
+          <div class="pa-2" v-if="isButton">
             <v-btn block @click="logout"> Logout </v-btn>
+          </div>
+          <div class="pa-2" v-if="!isButton">
+            <v-btn block :to="{ name: 'login' }"> Login </v-btn>
           </div>
         </template>
       </v-navigation-drawer>
@@ -117,7 +120,6 @@ const checkRole = (role: string) => {
   )
     return true
 }
-console.log(localStorage)
 </script>
 
 <style lang="css">

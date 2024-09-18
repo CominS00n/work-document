@@ -6,8 +6,8 @@
         <v-card>
           <v-card-text>
             <v-card-title>All Project</v-card-title>
-            <div class="inline-flex flex-wrap gap-5">
-              <v-card v-for="item in data" v-bind:key="item.id" max-width="360">
+            <div class="inline-flex flex-wrap justify-evenly gap-5">
+              <v-card v-for="item in data" :key="item.id" max-width="360">
                 <v-card-title>{{ item.name }}</v-card-title>
                 <v-card-subtitle class="space-x-2">
                   <v-chip
@@ -119,36 +119,16 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { db } from '@/firebase/firebase'
-import { collection, getDocs } from 'firebase/firestore'
 import { RouterLink } from 'vue-router'
+import type { ProjectData } from '@/interface/interface'
+import { useProjectDataStore } from '@/stores/getProjectData'
 
-interface ProjectData {
-  id: string
-  type: string
-  name: string
-  language: string
-  detail: string
-  status: string
-}
-
+const { getAllProjectData } = useProjectDataStore()
 const data = ref<ProjectData[]>([])
-const getDocsData = async () => {
-  const querySnapshot = await getDocs(collection(db, 'working'))
-  querySnapshot.forEach((doc) => {
-    const docData = {
-      id: doc.id,
-      type: doc.data().type,
-      name: doc.data().name,
-      language: doc.data().language,
-      detail: doc.data().detail,
-      status: doc.data().status
-    }
-    data.value.push(docData)
-  })
-}
 
 onMounted(async () => {
-  await getDocsData()
+  await getAllProjectData().then((res) => {
+    data.value = res
+  })
 })
 </script>

@@ -18,11 +18,11 @@ export const useLoginStore = defineStore('login', () => {
           localStorage.setItem('role', doc.get('role'))
           if (route.query.redirect) {
             router.push({ path: route.query.redirect as string }).then(() => {
-              window.location.reload()
+              location.reload()
             })
           } else {
             router.push({ name: 'home' }).then(() => {
-              window.location.reload()
+              location.reload()
             })
           }
         } else {
@@ -39,7 +39,7 @@ export const useLoginStore = defineStore('login', () => {
     localStorage.removeItem('username')
     localStorage.removeItem('role')
     router.push({ name: 'home', query: { logout: null } }).then(() => {
-      window.location.reload()
+      location.reload()
     })
   }
   return { login, logout }
