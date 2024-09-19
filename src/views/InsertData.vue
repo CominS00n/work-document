@@ -167,27 +167,27 @@ const formData = reactive<ProjectData>({
 })
 
 const submitToGoogleSheets = async () => {
-  // try {
-  //   const URL =
-  //     'https://script.google.com/macros/s/AKfycbxJzfTPzvdy-7eJcWbcO4W82TjyGiltR6dsecyOwcCDHsAa_7jiZYJWi-mWGYHIbMIgaQ/exec'
-  //   await fetch(URL, {
-  //     redirect: 'follow',
-  //     method: 'POST',
-  //     body: JSON.stringify(formData),
-  //     headers: {
-  //       'Content-Type': 'text/plain;charset=utf-8'
-  //     }
-  //   }).then((res) => {
-  //     if (res.ok) {
-  //       console.log('Data saved successfully')
-  //     } else {
-  //       console.error('Error occurred while saving data to Google Sheets')
-  //       toast.error('Error occurred while saving data to Google Sheets')
-  //     }
-  //   })
-  // } catch (error) {
-  //   console.error('Error saving data to Google Sheets:', error)
-  // }
+  try {
+    const URL =
+      'https://script.google.com/macros/s/AKfycbxJzfTPzvdy-7eJcWbcO4W82TjyGiltR6dsecyOwcCDHsAa_7jiZYJWi-mWGYHIbMIgaQ/exec'
+    await fetch(URL, {
+      redirect: 'follow',
+      method: 'POST',
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      }
+    }).then((res) => {
+      if (res.ok) {
+        console.log('Data saved successfully')
+      } else {
+        console.error('Error occurred while saving data to Google Sheets')
+        toast.error('Error occurred while saving data to Google Sheets')
+      }
+    })
+  } catch (error) {
+    console.error('Error saving data to Google Sheets:', error)
+  }
 
   try {
     await addProject(formData, readme.value)
