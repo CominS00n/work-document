@@ -21,12 +21,6 @@
             <v-card-title> More Details </v-card-title>
             <v-card-text>
               <v-table>
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
                     <td>Server IP:</td>

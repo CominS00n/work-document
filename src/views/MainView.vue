@@ -1,7 +1,7 @@
 <template>
   <v-app :theme="changTheme.theme">
     <v-layout>
-      <v-navigation-drawer>
+      <v-navigation-drawer class="side-bar">
         <v-list>
           <v-list-item title="Documentation">
             <template v-slot:append>
@@ -137,4 +137,12 @@ const checkRole = (role: string) => {
   }
 }
 
+.side-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.side-bar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
 </style>
