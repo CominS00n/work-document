@@ -2,8 +2,11 @@ import { defineStore } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { db } from '@/firebase/firebase'
 import { collection, getDocs } from 'firebase/firestore'
+import { useToast } from 'vue-toastification'
 
 import sha256 from 'crypto-js/sha256'
+
+const toast = useToast()
 
 export const useLoginStore = defineStore('login', () => {
   const route = useRoute()
@@ -20,18 +23,22 @@ export const useLoginStore = defineStore('login', () => {
             router.push({ path: route.query.redirect as string }).then(() => {
               location.reload()
             })
+            return
           } else {
             router.push({ name: 'home' }).then(() => {
               location.reload()
             })
+            return
           }
         } else {
-          console.log('User or password is not found')
+          return
         }
-      } else {
-        console.log('User or password is not found')
+      }
+      else{
+        return
       }
     })
+    toast.error('Username is not found')
   }
 
   const logout = () => {
