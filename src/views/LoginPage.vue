@@ -42,8 +42,8 @@ const passwordRules = [
   (v: string) => (v && v.length >= 8) || 'Password must be at least 8 characters'
 ]
 
-const submit = () => {
-  login(username.value.trim(), password.value)
+const submit = async () => {
+  await login(username.value.trim(), password.value)
 }
 
 const router = useRouter()

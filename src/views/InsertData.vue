@@ -108,7 +108,7 @@
               ></v-divider
             >
           </v-card-text>
-          <v-card-text class="h-[600px]" v-if="showReadme">
+          <v-card-text v-if="showReadme">
             <h3>Readme.md</h3>
             <v-row class="h-full">
               <v-col cols="6">
@@ -123,7 +123,7 @@
               <v-col cols="6">
                 <h3 class="font-bold">Preview:</h3>
                 <div class="w-full h-full p-3 border rounded-md">
-                  <div v-html="renderedMarkdown"></div>
+                  <div class="prose prose-lg max-w-none" v-html="renderedMarkdown"></div>
                 </div>
               </v-col>
             </v-row>
@@ -167,27 +167,27 @@ const formData = reactive<ProjectData>({
 })
 
 const submitToGoogleSheets = async () => {
-  try {
-    const URL =
-      'https://script.google.com/macros/s/AKfycbxJzfTPzvdy-7eJcWbcO4W82TjyGiltR6dsecyOwcCDHsAa_7jiZYJWi-mWGYHIbMIgaQ/exec'
-    await fetch(URL, {
-      redirect: 'follow',
-      method: 'POST',
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      }
-    }).then((res) => {
-      if (res.ok) {
-        console.log('Data saved successfully')
-      } else {
-        console.error('Error occurred while saving data to Google Sheets')
-        toast.error('Error occurred while saving data to Google Sheets')
-      }
-    })
-  } catch (error) {
-    console.error('Error saving data to Google Sheets:', error)
-  }
+  // try {
+  //   const URL =
+  //     'https://script.google.com/macros/s/AKfycbxJzfTPzvdy-7eJcWbcO4W82TjyGiltR6dsecyOwcCDHsAa_7jiZYJWi-mWGYHIbMIgaQ/exec'
+  //   await fetch(URL, {
+  //     redirect: 'follow',
+  //     method: 'POST',
+  //     body: JSON.stringify(formData),
+  //     headers: {
+  //       'Content-Type': 'text/plain;charset=utf-8'
+  //     }
+  //   }).then((res) => {
+  //     if (res.ok) {
+  //       console.log('Data saved successfully')
+  //     } else {
+  //       console.error('Error occurred while saving data to Google Sheets')
+  //       toast.error('Error occurred while saving data to Google Sheets')
+  //     }
+  //   })
+  // } catch (error) {
+  //   console.error('Error saving data to Google Sheets:', error)
+  // }
 
   try {
     await addProject(formData, readme.value)

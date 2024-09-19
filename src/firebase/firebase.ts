@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, addDoc } from 'firebase/firestore'
+import { getStorage, ref as storageRef, uploadBytesResumable } from 'firebase/storage'
 import type { ProjectData } from '@/interface/interface'
 
 const firebaseConfig = {
@@ -14,8 +15,27 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
+const storage = getStorage(app)
 
 const addProject = async (data: ProjectData, readme: string) => {
+  const fileName = data.name + '.md'
+  const storageReference = storageRef(storage, 'working/' + fileName)
+  try {
+    const markdownBlob = new Blob([readme], { type: 'text/markdown' })
+    const uploadTask = uploadBytesResumable(storageReference, markdownBlob)
+    uploadTask.on('state_changed', (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      console.log('Upload is ' + progress + '% done')
+    }),
+      (error: any) => {
+        console.error('Upload failed:', error)
+      },
+      () => {
+        console.log('File uploaded successfully!')
+      }
+  } catch (e) {
+    console.error('Error uploading file: ', e)
+  }
   try {
     const docRef = await addDoc(collection(db, 'working'), {
       type: data.type,
@@ -28,7 +48,8 @@ const addProject = async (data: ProjectData, readme: string) => {
       url: data.url,
       log: data.log,
       document: data.document,
-      etc: data.etc
+      etc: data.etc,
+      readme: storageReference.fullPath
     })
     console.log('Document written with ID: ', docRef.id)
   } catch (e) {
@@ -36,4 +57,4 @@ const addProject = async (data: ProjectData, readme: string) => {
   }
 }
 
-export { db, addProject }
+export { db, addProject, app }

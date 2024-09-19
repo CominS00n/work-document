@@ -7,13 +7,15 @@ import type { ProjectData } from '@/interface/interface'
 export const useProjectDataStore = defineStore('projectData', () => {
   const getProjectData = async (id: string) => {
     const projectData = ref<ProjectData>()
+    const file = ref<string>('')
     const querySnapshot = await getDocs(collection(db, 'working'))
     querySnapshot.forEach((doc) => {
       if (doc.id === id) {
         projectData.value = doc.data() as ProjectData
+        file.value = doc.get('readme')
       }
     })
-    return projectData.value
+    return { data: projectData.value, file: file.value }
   }
 
   const getAllProjectData = async () => {

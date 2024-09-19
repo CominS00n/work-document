@@ -49,13 +49,17 @@
                 </tbody>
               </v-table>
 
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia sint velit voluptatem
-                quaerat pariatur itaque! Autem alias quis magni unde numquam. Praesentium recusandae
-                neque unde fugit, cumque quia atque quasi dolorum accusantium quae, aliquid officia
-                eligendi ipsa repellat dolore, dicta saepe. Nam asperiores, culpa voluptas vero quia
-                corporis obcaecati facilis!
-              </p>
+              <v-divider
+                v-if="renderedMarkdown !== ''"
+                class="border-opacity-100 my-5"
+                :thickness="5"
+              ></v-divider>
+              <div
+                v-if="renderedMarkdown !== ''"
+                class="prose prose-lg max-w-none"
+                v-html="renderedMarkdown"
+                
+              ></div>
             </v-card-text>
           </v-card>
         </div>
@@ -65,8 +69,11 @@
 </template>
 
 <script setup lang="ts">
+import { marked } from 'marked'
 import { onMounted, watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { app } from '@/firebase/firebase'
+import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage'
 import { useProjectDataStore } from '@/stores/getProjectData'
 import type { ProjectData } from '@/interface/interface'
 
@@ -74,16 +81,32 @@ const { getProjectData } = useProjectDataStore()
 
 const route = useRoute()
 const projectData = ref<ProjectData>()
+const storage = getStorage(app)
+const renderedMarkdown = ref<string>('')
+
+const selectFile = async (filename: string) => {
+  if (filename !== '') {
+    const fileRef = storageRef(storage, filename)
+    const url = await getDownloadURL(fileRef)
+    const response = await fetch(url)
+    const markdownText = await response.text()
+    renderedMarkdown.value = marked(markdownText).toString()
+  } else {
+    renderedMarkdown.value = ''
+  }
+}
 
 onMounted(async () => {
   await getProjectData(route.params.id.toString()).then((data) => {
-    projectData.value = data
+    projectData.value = data.data
+    selectFile(data.file)
   })
 })
 
 watch(route, async () => {
   await getProjectData(route.params.id.toString()).then((data) => {
-    projectData.value = data
+    projectData.value = data.data
+    selectFile(data.file)
   })
 })
 </script>

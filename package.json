@@ -13,6 +13,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/vue-markdown": "^2.2.4",
     "axios": "^1.7.7",
     "boxicons": "^2.1.4",
     "crypto-js": "^4.2.0",
