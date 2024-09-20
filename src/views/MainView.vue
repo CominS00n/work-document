@@ -56,10 +56,10 @@
           </v-list-item>
         </v-list>
         <template v-slot:append>
-          <div class="pa-2" v-if="isButton">
+          <div class="pa-2" v-show="isButton()">
             <v-btn block @click="logout"> Logout </v-btn>
           </div>
-          <div class="pa-2" v-if="!isButton">
+          <div class="pa-2" v-show="!isButton()">
             <v-btn block :to="{ name: 'login' }"> Login </v-btn>
           </div>
         </template>
@@ -103,13 +103,16 @@ onMounted(async () => {
   await getNavList().then((res) => {
     menuItems.value = res
   })
-
-  if (window.name !== '') {
-    isButton.value = true
-  }
+  isButton()
 })
 
-const isButton = ref(false)
+const isButton = () => {
+  if (!localStorage.getItem('username')) {
+    return false
+  } else {
+    return true
+  }
+}
 
 const checkRole = (role: string) => {
   if (role === 'user') return true
@@ -142,7 +145,7 @@ const checkRole = (role: string) => {
 }
 
 .side-bar {
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 </style>
