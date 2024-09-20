@@ -58,7 +58,6 @@
                 v-if="renderedMarkdown !== ''"
                 class="prose prose-lg max-w-none"
                 v-html="renderedMarkdown"
-                
               ></div>
             </v-card-text>
           </v-card>

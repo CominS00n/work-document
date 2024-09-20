@@ -106,7 +106,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-  if (to.meta.requiresAuth && !localStorage.getItem('username') && to.meta.role !== localStorage.getItem('role')) {
+  if (
+    to.meta.requiresAuth &&
+    !localStorage.getItem('username') &&
+    to.meta.role !== localStorage.getItem('role')
+  ) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 })
