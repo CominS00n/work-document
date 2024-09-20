@@ -100,7 +100,6 @@ const menuItems = ref<
 >([])
 
 onMounted(async () => {
-  isButton()
   await getNavList().then((res) => {
     menuItems.value = res
   })

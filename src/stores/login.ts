@@ -46,7 +46,9 @@ export const useLoginStore = defineStore('login', () => {
     window.name = ''
     localStorage.removeItem('username')
     localStorage.removeItem('role')
-    router.push({ name: 'home', query: { logout: null } })
+    router.push({ name: 'home', query: { logout: null } }).then(() => {
+      location.reload()
+    })
   }
   return { login, logout }
 })
