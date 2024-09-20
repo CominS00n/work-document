@@ -6,8 +6,8 @@
         <v-card>
           <v-card-text>
             <v-card-title>All Project</v-card-title>
-            <div class="inline-flex flex-wrap justify-start gap-x-7 gap-y-3">
-              <v-card v-for="item in data" :key="item.id" max-width="360">
+            <div class="flex flex-wrap justify-between gap-y-5">
+              <v-card v-for="item in data" :key="item.id" width="350">
                 <v-card-title>{{ item.name }}</v-card-title>
                 <v-card-subtitle class="space-x-2">
                   <v-chip
