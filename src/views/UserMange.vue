@@ -24,7 +24,6 @@
                   <td class="space-x-2">
                     <v-btn
                       variant="text"
-                      :disabled="disabled(item.username)"
                       @click="openEditUser(item.id)"
                       ><box-icon name="edit-alt"></box-icon
                     ></v-btn>
@@ -70,6 +69,7 @@
                 label="Select"
                 variant="underlined"
                 density="compact"
+                :disabled="disabled(userEdit.username)"
                 :items="['super-admin', 'admin', 'user']"
               ></v-select>
             </v-card-text>
